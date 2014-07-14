@@ -1,11 +1,11 @@
 class LinkedList
   attr_accessor :size
 
-  def initialize(*value)
+  def initialize(*values)
     @size = 0
     @last = nil
-    if value.size > 0
-      value.each{ |value|  push(value) }
+    if values.size > 0
+      values.each{ |value|  push(value) }
     end
   end
 
@@ -22,7 +22,7 @@ class LinkedList
   end
 
   def get(index,return_item=false)
-    raise IndexError if index < 0
+    raise IndexError if index < 0 || index >= @size
     current_item = @first_item
     index.times do
       raise IndexError if current_item.nil?
@@ -32,24 +32,19 @@ class LinkedList
   end
 
   def last
-    if @last.nil?
-      nil
-    else
-      @last.payload
-    end
+    @last.nil? ? nil : @last.payload
   end
 
   def delete(index)
-    @size -= 1
     if index === 0
       @first_item = @first_item.next_item
     else
-      item_to_delete = get(index,true)
       prev_item = get(index-1, true)
+      item_to_delete = prev_item.next_item
       prev_item.next_item = item_to_delete.next_item
       @last = prev_item if item_to_delete.last?
-      item_to_delete = nil
     end
+    @size -= 1
   end
 
   def index(value)
@@ -74,7 +69,6 @@ class LinkedList
       end
     end
     show_list += "|"
-    show_list
   end
 
   def [](index)
