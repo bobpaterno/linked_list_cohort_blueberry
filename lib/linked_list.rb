@@ -79,6 +79,55 @@ class LinkedList
     get(index, true).payload = value
   end
 
+  def sorted?
+    return true if @size <= 1
+    is_sorted = true
+    prev_item = @first_item
+    current_item = @first_item
+    until current_item.last?
+      current_item = prev_item.next_item
+      return if prev_item > current_item
+      prev_item = current_item
+    end
+    true
+  end
+
+  def swap_with_next(index)
+    raise IndexError if index >= @size-1
+    if index === 0
+      itemA = @first_item
+      itemB = @first_item.next_item
+      itemC = itemB.next_item
+      @first_item = itemB
+      @first_item.next_item = itemA
+      @first_item.next_item.next_item = itemC
+    else
+      itemA = get(index-1, true)
+      itemB = itemA.next_item
+      itemC = itemA.next_item.next_item
+
+      itemA.next_item = itemC
+      itemB.next_item = itemC.next_item
+      itemC.next_item = itemB
+    end
+  end
+
+  def sort!
+    until sorted?
+      current_item = @first_item
+      count = 0
+      until current_item.last?
+#        puts " ###########Count is #{count}  #{self.to_s}"
+        if current_item > current_item.next_item
+          swap_with_next(count)
+          current_item = get(count,true)
+        end
+        current_item = current_item.next_item
+        count += 1
+      end
+    end
+  end
+
   private
   def last_item
       current_item = @first_item
@@ -87,5 +136,6 @@ class LinkedList
       end
       current_item
   end
+
 
 end
